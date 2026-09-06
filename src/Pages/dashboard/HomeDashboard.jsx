@@ -14,7 +14,7 @@ export default function HomeDashboard() {
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
             <h1 className="text-headline-sm text-text-primary">Hi, {mockUser.name}</h1>
-            <span className="text-lg">👋</span>
+            <span className="text-lg"></span>
           </div>
           <p className="text-body-sm text-text-secondary">Good day, what are we paying today?</p>
         </div>
