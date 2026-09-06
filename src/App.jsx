@@ -4,6 +4,7 @@ import AuthLayout from './components/layout/AuthLayout'
 import HomeDashboard from './pages/dashboard/HomeDashboard'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
+import OtpVerification from './pages/auth/OtpVerification'
 
 
 function App() {
@@ -27,6 +28,9 @@ function App() {
 
       {/* Register route */}
       <Route path="/register" element={<Register />} />
+
+      {/* OTP Verification route */}\
+      <Route path="/otp-verification" element={<OtpVerification />} />
     </Routes>
   )
 }
