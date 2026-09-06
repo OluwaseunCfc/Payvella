@@ -45,5 +45,5 @@ export const mockUser = {
   name: 'Oluwaseun',
   fullName: 'Oluwaseun Adeyelu',
   phone: '0803 XXX XXXX',
-  balance: 125680.5,
+  balance: 1256805.5,
 }
