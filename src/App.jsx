@@ -3,6 +3,7 @@ import AppLayout from './components/layout/AppLayout'
 import AuthLayout from './components/layout/AuthLayout'
 import HomeDashboard from './pages/dashboard/HomeDashboard'
 import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
 
 
 function App() {
@@ -23,6 +24,9 @@ function App() {
 
       {/* Login route */}
       <Route path="/login" element={<Login />} />
+
+      {/* Register route */}
+      <Route path="/register" element={<Register />} />
     </Routes>
   )
 }
