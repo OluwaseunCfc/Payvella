@@ -5,14 +5,17 @@ import HomeDashboard from './pages/dashboard/HomeDashboard'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import OtpVerification from './pages/auth/OtpVerification'
-
+import ForgotPassword from './pages/auth/ForgotPassword'
 
 function App() {
   return (
     <Routes>
       {/* Auth routes */}
       <Route element={<AuthLayout />}>
-        {/* Login, Register, OTP, Forgot Password will go here */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/otp-verification" element={<OtpVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       {/* Authenticated app routes */}
@@ -22,15 +25,6 @@ function App() {
 
       {/* Default redirect */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-      {/* Login route */}
-      <Route path="/login" element={<Login />} />
-
-      {/* Register route */}
-      <Route path="/register" element={<Register />} />
-
-      {/* OTP Verification route */}\
-      <Route path="/otp-verification" element={<OtpVerification />} />
     </Routes>
   )
 }
