@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import AppLayout from './components/layout/AppLayout'
-import AuthLayout from './components/layout/AuthLayout'
-import HomeDashboard from './pages/dashboard/HomeDashboard'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import OtpVerification from './pages/auth/OtpVerification'
-import ForgotPassword from './pages/auth/ForgotPassword'
-import Airtime from './pages/services/Airtime'
-import Data from './pages/services/Data'
+import AppLayout from './Components/Layout/AppLayout'
+import AuthLayout from './Components/Layout/AuthLayout'
+import HomeDashboard from './Pages/dashboard/HomeDashboard'
+import Login from './Pages/auth/Login'
+import Register from './Pages/auth/Register'
+import OtpVerification from './Pages/auth/OtpVerification'
+import ForgotPassword from './Pages/auth/ForgotPassword'
+import Airtime from './Pages/services/Airtime'
+import Data from './Pages/services/Data'
 
 function App() {
   return (
