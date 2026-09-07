@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdCall, MdWifi, MdContacts, MdVerifiedUser, MdSendToMobile } from 'react-icons/md'
-import NetworkSelector from '../../Components/Forms/NetworkSelector'
-import AmountSelector from '../../Components/Forms/AmountSelector'
-import ConfirmationModal from '../../Components/Forms/ConfirmationModal'
-import SuccessScreen from '../../Components/Forms/SuccessScreen'
-import ErrorScreen from '../../Components/Forms/ErrorScreen'
+import NetworkSelector from '../../components/forms/NetworkSelector'
+import AmountSelector from '../../components/forms/AmountSelector'
+import ConfirmationModal from '../../components/forms/ConfirmationModal'
+import PinEntry from '../../components/forms/PinEntry'
+import SuccessScreen from '../../components/forms/SuccessScreen'
+import ErrorScreen from '../../components/forms/ErrorScreen'
 import { mockUser } from '../../data/mockData'
 
 // Stored WITHOUT the leading 0, since the input only collects the 10 digits after +234
@@ -20,20 +21,6 @@ const formatMoney = (num) =>
 
 const generateReference = () => `PVL-${Math.floor(10000000 + Math.random() * 90000000)}`
 
-const normalizePhone = (value) => {
-  let digitsOnly = value.replace(/\D/g, '')
-
-  if (digitsOnly.startsWith('234')) {
-    digitsOnly = digitsOnly.slice(3)
-  }
-
-  if (digitsOnly.startsWith('0')) {
-    digitsOnly = digitsOnly.slice(1)
-  }
-
-  return digitsOnly.slice(0, 10)
-}
-
 export default function Airtime() {
   const navigate = useNavigate()
   const [network, setNetwork] = useState('mtn')
@@ -41,6 +28,7 @@ export default function Airtime() {
   const [amount, setAmount] = useState('1000')
   const [phoneError, setPhoneError] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isPinOpen, setIsPinOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [view, setView] = useState('form') // form | success | error
   const [reference, setReference] = useState('')
@@ -49,29 +37,27 @@ export default function Airtime() {
   const fullPhoneNumber = phone ? `0${phone}` : ''
 
   const handlePhoneChange = (e) => {
-    setPhone(normalizePhone(e.target.value))
+    let digitsOnly = e.target.value.replace(/\D/g, '')
+    if (digitsOnly.startsWith('0')) {
+      digitsOnly = digitsOnly.slice(1)
+    }
+    setPhone(digitsOnly.slice(0, 10))
     setPhoneError('')
   }
 
   const validatePhone = () => {
-    const normalizedPhone = normalizePhone(phone)
-
-    if (!normalizedPhone) {
+    if (!phone) {
       setPhoneError('Phone number is required')
       return false
     }
-    if (normalizedPhone.length !== 10) {
-      setPhone(normalizedPhone)
+    if (phone.length !== 10) {
       setPhoneError('Phone number must be 10 digits')
       return false
     }
-    if (!/^[789]\d{9}$/.test(normalizedPhone)) {
-      setPhone(normalizedPhone)
+    if (!/^[789]/.test(phone)) {
       setPhoneError('Enter a valid Nigerian phone number')
       return false
     }
-
-    setPhone(normalizedPhone)
     setPhoneError('')
     return true
   }
@@ -82,7 +68,16 @@ export default function Airtime() {
     setIsModalOpen(true)
   }
 
-  const handleConfirm = async () => {
+  // Confirmation modal's "Confirm Payment" no longer charges directly —
+  // it hands off to PIN entry first.
+  const handleConfirmSummary = () => {
+    setIsModalOpen(false)
+    setIsPinOpen(true)
+  }
+
+  // Only runs after a correct PIN.
+  const processPayment = async () => {
+    setIsPinOpen(false)
     setIsProcessing(true)
 
     // TODO: replace with real API call, e.g.
@@ -90,7 +85,6 @@ export default function Airtime() {
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     setIsProcessing(false)
-    setIsModalOpen(false)
 
     // Simulated: treat as success. Swap this for real response handling later.
     setReference(generateReference())
@@ -220,10 +214,11 @@ export default function Airtime() {
       <button
         type="button"
         onClick={handleContinue}
-        className="w-full h-[52px] rounded-full bg-brand hover:bg-brand-dark text-white text-label-lg font-bold shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+        disabled={isProcessing}
+        className="w-full h-[52px] rounded-full bg-brand hover:bg-brand-dark text-white text-label-lg font-bold shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
       >
         <MdSendToMobile size={20} />
-        <span>Continue to Pay ₦{formatMoney(numericAmount)}</span>
+        <span>{isProcessing ? 'Processing...' : `Continue to Pay ₦${formatMoney(numericAmount)}`}</span>
       </button>
 
       <div className="flex items-center justify-center gap-1.5 text-text-secondary">
@@ -233,9 +228,8 @@ export default function Airtime() {
 
       <ConfirmationModal
         isOpen={isModalOpen}
-        onClose={() => !isProcessing && setIsModalOpen(false)}
-        onConfirm={handleConfirm}
-        isProcessing={isProcessing}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmSummary}
         title="Confirm Airtime Purchase"
         rows={[
           { label: 'Network', value: network.toUpperCase() },
@@ -244,6 +238,13 @@ export default function Airtime() {
           { label: 'Transaction Fee', value: 'Free' },
           { label: 'Total', value: `₦${formatMoney(numericAmount)}`, emphasize: true },
         ]}
+      />
+
+      <PinEntry
+        isOpen={isPinOpen}
+        onClose={() => setIsPinOpen(false)}
+        onSuccess={processPayment}
+        amountLabel={`₦${formatMoney(numericAmount)}`}
       />
     </div>
   )

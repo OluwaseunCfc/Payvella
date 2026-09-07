@@ -7,6 +7,7 @@ import Register from './pages/auth/Register'
 import OtpVerification from './pages/auth/OtpVerification'
 import ForgotPassword from './pages/auth/ForgotPassword'
 import Airtime from './pages/services/Airtime'
+import Data from './pages/services/Data'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route element={<AppLayout />}>
         <Route path="/dashboard" element={<HomeDashboard />} />
         <Route path="/airtime" element={<Airtime />} />
+        <Route path="/data" element={<Data />} />
       </Route>
 
       {/* Default redirect */}
