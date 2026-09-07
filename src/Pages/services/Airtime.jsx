@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdCall, MdWifi, MdContacts, MdVerifiedUser, MdSendToMobile } from 'react-icons/md'
-import NetworkSelector from '../../components/forms/NetworkSelector'
-import AmountSelector from '../../components/forms/AmountSelector'
-import ConfirmationModal from '../../components/forms/ConfirmationModal'
-import PinEntry from '../../components/forms/PinEntry'
-import SuccessScreen from '../../components/forms/SuccessScreen'
-import ErrorScreen from '../../components/forms/ErrorScreen'
+import NetworkSelector from "../../Components/Forms/NetworkSelector";
+import AmountSelector from "../../Components/Forms/AmountSelector";
+import ConfirmationModal from "../../Components/Forms/ConfirmationModal";
+import PinEntry from "../../Components/Forms/PinEntry";
+import SuccessScreen from "../../Components/Forms/SuccessScreen";
+import ErrorScreen from '../../Components/forms/ErrorScreen'
 import { mockUser } from '../../data/mockData'
 
 // Stored WITHOUT the leading 0, since the input only collects the 10 digits after +234
