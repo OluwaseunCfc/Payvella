@@ -6,7 +6,7 @@ import AmountSelector from "../../Components/Forms/AmountSelector";
 import ConfirmationModal from "../../Components/Forms/ConfirmationModal";
 import PinEntry from "../../Components/Forms/PinEntry";
 import SuccessScreen from "../../Components/Forms/SuccessScreen";
-import ErrorScreen from '../../Components/forms/ErrorScreen'
+import ErrorScreen from "../../Components/Forms/ErrorScreen";
 import { mockUser } from '../../data/mockData'
 
 // Stored WITHOUT the leading 0, since the input only collects the 10 digits after +234
