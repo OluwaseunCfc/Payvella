@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { useAuth } from '../../hooks/useAuth'
 
 const OTP_LENGTH = 6
 const RESEND_SECONDS = 60
@@ -15,6 +16,7 @@ const maskPhone = (phone) => {
 export default function OtpVerification() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { login } = useAuth()
   const phone = location.state?.phone
 
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''))
@@ -81,6 +83,7 @@ export default function OtpVerification() {
 
     setIsSubmitting(false)
     setStatus('success')
+    login()
     toast.success('Phone verified successfully')
     setTimeout(() => navigate('/dashboard'), 700)
   }

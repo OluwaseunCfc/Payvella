@@ -1,30 +1,36 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { MdVisibility, MdVisibilityOff, MdEmail, MdLock } from 'react-icons/md'
+import { MdVisibility, MdVisibilityOff, MdLock } from 'react-icons/md'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function Login() {
   const navigate = useNavigate()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const { login } = useAuth()
+  const [phone, setPhone] = useState('') // holds only the 10 digits after +234
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-    setErrors((prev) => ({ ...prev, [name]: '' }))
+  const handlePhoneChange = (e) => {
+    let digitsOnly = e.target.value.replace(/\D/g, '')
+    if (digitsOnly.startsWith('0')) {
+      digitsOnly = digitsOnly.slice(1)
+    }
+    setPhone(digitsOnly.slice(0, 10))
+    setErrors((prev) => ({ ...prev, phone: '' }))
   }
 
   const validate = () => {
     const newErrors = {}
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/^\S+@\S+\.\S+$/.test(form.email)) {
-      newErrors.email = 'Enter a valid email address'
+    if (!phone) {
+      newErrors.phone = 'Phone number is required'
+    } else if (phone.length !== 10 || !/^[789]/.test(phone)) {
+      newErrors.phone = 'Enter a valid Nigerian phone number'
     }
-    if (!form.password) {
+    if (!password) {
       newErrors.password = 'Password is required'
     }
     setErrors(newErrors)
@@ -38,10 +44,11 @@ export default function Login() {
     setIsSubmitting(true)
 
     // TODO: replace with real API call, e.g.
-    // const { data } = await api.post('/auth/login/', form)
+    // const { data } = await api.post('/auth/login/', { phone: `0${phone}`, password })
     await new Promise((resolve) => setTimeout(resolve, 1200))
 
     setIsSubmitting(false)
+    login()
     toast.success('Login successful')
     navigate('/dashboard')
   }
@@ -54,27 +61,29 @@ export default function Login() {
       </div>
 
       <div className="flex flex-col gap-4">
-        {/* Email */}
+        {/* Phone number */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="email" className="text-label-lg text-text-primary">
-            Email
+          <label htmlFor="phone" className="text-label-lg text-text-primary">
+            Phone number
           </label>
-          <div className="relative">
-            <MdEmail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+          <div
+            className={`flex items-center gap-2 h-12 pl-4 pr-4 rounded-md bg-card border focus-within:ring-2 focus-within:ring-brand/20 transition-colors ${
+              errors.phone ? 'border-error' : 'border-border focus-within:border-brand'
+            }`}
+          >
+            <span className="text-body-md text-text-primary font-semibold shrink-0">+234</span>
             <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              className={`w-full h-12 pl-10 pr-4 rounded-md bg-card border text-body-md text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 transition-colors ${
-                errors.email ? 'border-error' : 'border-border focus:border-brand'
-              }`}
+              id="phone"
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              value={phone}
+              onChange={handlePhoneChange}
+              placeholder="803 456 7890"
+              className="flex-1 min-w-0 bg-transparent text-body-md text-text-primary placeholder:text-text-muted focus:outline-none"
             />
           </div>
-          {errors.email && <span className="text-body-sm text-error">{errors.email}</span>}
+          {errors.phone && <span className="text-body-sm text-error">{errors.phone}</span>}
         </div>
 
         {/* Password */}
@@ -86,11 +95,13 @@ export default function Login() {
             <MdLock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               id="password"
-              name="password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
-              value={form.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                setErrors((prev) => ({ ...prev, password: '' }))
+              }}
               placeholder="Enter your password"
               className={`w-full h-12 pl-10 pr-11 rounded-md bg-card border text-body-md text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 transition-colors ${
                 errors.password ? 'border-error' : 'border-border focus:border-brand'

@@ -1,9 +1,9 @@
 import { MdVerified } from 'react-icons/md'
-import WalletCard from "../../Components/Dashboard/WalletCard";
-import QuickActions from "../../Components/Dashboard/QuickActions";
-import ServiceGrid from "../../Components/Dashboard/ServiceGrid";
-import PromoCarousel from "../../Components/Dashboard/PromoCarousel";
-import RecentTransactions from "../../Components/Dashboard/RecentTransactions";
+import WalletCard from '../../components/dashboard/WalletCard'
+import QuickActions from '../../components/dashboard/QuickActions'
+import ServiceGrid from '../../components/dashboard/ServiceGrid'
+import PromoCarousel from '../../components/dashboard/PromoCarousel'
+import RecentTransactions from '../../components/dashboard/RecentTransactions'
 import { mockUser } from '../../data/mockData'
 
 export default function HomeDashboard() {

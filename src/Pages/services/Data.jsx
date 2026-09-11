@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdCall, MdWifi, MdContacts, MdVerifiedUser, MdSendToMobile } from 'react-icons/md'
-import NetworkSelector from '../../Components/Forms/NetworkSelector'
-import DataPlanCard from '../../Components/Forms/DataPlanCard'
-import ConfirmationModal from '../../Components/Forms/ConfirmationModal'
-import PinEntry from '../../Components/Forms/PinEntry'
-import SuccessScreen from '../../Components/Forms/SuccessScreen'
-import ErrorScreen from '../../Components/Forms/ErrorScreen'
+import NetworkSelector from '../../components/forms/NetworkSelector'
+import DataPlanCard from '../../components/forms/DataPlanCard'
+import ConfirmationModal from '../../components/forms/ConfirmationModal'
+import PinEntry from '../../components/forms/PinEntry'
+import SuccessScreen from '../../components/forms/SuccessScreen'
+import ErrorScreen from '../../components/forms/ErrorScreen'
+import { mockUser, dataPlans } from '../../data/mockData'
 
 const RECENT_CONTACTS = [
   { label: 'Mom', number: '8031234567' },
